@@ -5,10 +5,15 @@ const path = require("path");
 const nlp = require("compromise");
 const cors = require("cors"); // Import the cors package
 
+
+const corsOptions = {
+  origin: '*', // Allow all origins
+};
+
 // Initialize express app
 const app = express();
 app.use(express.json());
-app.use(cors()); // Enable CORS for all routes
+app.use(cors(corsOptions)); // Enable CORS for all routes
 
 // Load themes from the themes.json file in the same directory
 const themesPath = path.join(__dirname, "themes.json");
