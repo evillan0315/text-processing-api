@@ -14,7 +14,12 @@ const corsOptions = {
 const app = express();
 app.use(express.json());
 app.use(cors(corsOptions)); // Enable CORS for all routes
-
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*'); // Or specify the domains you want to allow
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  next();
+});
 // Load themes from the themes.json file in the same directory
 const themesPath = path.join(__dirname, "themes.json");
 let themes;
@@ -105,31 +110,58 @@ function getPartOfSpeech(word) {
 
 // Function to wrap keywords in <span> tags with class names based on themes, and nouns and pronouns
 function wrapKeywordsInSpan(text, keywords) {
-  keywords.forEach(({ word, theme }) => {
-    const regex = new RegExp(`\\b${word}\\b`, "gi");
+  // Detect line breaks and split the text into paragraphs
+  const paragraphs = text.split(/\r?\n/);  // Split by line breaks (\n or \r\n)
 
-    // Wrap the theme-related words in <span> with their theme class
-    //text = text.replace(regex, `<span class="${theme}">${word}</span>`);
-    text = text.replace(regex, `<span>${word}</span>`);
+  // Wrap each paragraph in <p> or other tags based on hashtags
+  const wrappedParagraphs = paragraphs.map(paragraph => {
+    // Check if the paragraph starts with ## (double hash)
+    if (paragraph.startsWith('### ')) {
+      // Wrap with <h2> if it starts with double hash and remove the '## ' part
+      paragraph = `<h2>${paragraph.slice(4)}</h2>`;
+    }
+    
+    // Check if the paragraph starts with # (single hash)
+    else if (paragraph.startsWith('## ')) {
+      // Wrap with <h1> if it starts with a single hash and remove the '# ' part
+      paragraph = `<h1>${paragraph.slice(3)}</h1>`;
+    } else {
+      // For regular paragraphs, wrap the keywords in <span>
+      keywords.forEach(({ word, theme }) => {
+        const regex = new RegExp(`\\b${word}\\b`, "gi");
+        paragraph = paragraph.replace(regex, `<span>${word}</span>`);
+      });
 
-  });
+      // Wrap nouns in <b> and pronouns in <i>, ensuring no overlap with <span> tags
+      paragraph = paragraph.replace(/\b\w+\b/g, (match) => {
+        const pos = getPartOfSpeech(match);
+        // Avoid wrapping words already in <span>
+        if (!/<span[^>]*>/.test(match)) {
+          if (pos === "noun") {
+            return `<b>${match}</b>`;
+          } else if (pos === "pronoun") {
+            return `<i>${match}</i>`;
+          }
+        }
+        return match; // No wrapping if it's neither noun nor pronoun
+      });
 
-  // Wrap nouns in <b> and pronouns in <i>, making sure to not wrap words already in <span>
-  text = text.replace(/\b\w+\b/g, (match) => {
-    const pos = getPartOfSpeech(match);
-    // Avoid wrapping words already in <span>
-    if (!/<span[^>]*>/.test(match)) {
-      if (pos === "noun") {
-        return `<b>${match}</b>`;
-      } else if (pos === "pronoun") {
-        return `<i>${match}</i>`;
+      // Wrap regular paragraphs in <p> tags
+      paragraph = `<p>${paragraph}</p>`;
+      if (paragraph.startsWith('# ')) {
+        // Wrap with <h2> if it starts with double hash and remove the '## ' part
+        paragraph = `<h1>${paragraph.slice(2)}</h1>`;
       }
     }
-    return match; // No wrapping if it's neither noun nor pronoun
+    
+    return paragraph;
   });
 
-  return text;
+  // Join all paragraphs back into a single string
+  return wrappedParagraphs.join("\n");
 }
+
+
 
 // Define API route
 app.post("/process-text", (req, res) => {
@@ -140,6 +172,7 @@ app.post("/process-text", (req, res) => {
   }
 
   try {
+   //onsole.log("Processing text:", text); // Log the input text
     const keywords = extractHeavyKeywords(text, themes);
     const wrappedText = wrapKeywordsInSpan(text, keywords);
 
@@ -148,14 +181,16 @@ app.post("/process-text", (req, res) => {
       keywords: keywords,
     });
   } catch (error) {
+    console.error("Error processing text:", error); // Log the error for debugging
     return res
       .status(500)
       .json({ error: "Failed to process the request", details: error.message });
   }
 });
 
+
 // Start the server
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
