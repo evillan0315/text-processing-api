@@ -1,0 +1,10 @@
+
+# Connect to Supabase via connection pooling with Supavisor.
+DATABASE_URL="postgresql://postgres.gdauueumrqvylwdqcfdx:c47usqda7wif3q4G@aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres?pgbouncer=true"
+
+# Direct connection to the database. Used for migrations.
+DIRECT_URL="postgresql://postgres.gdauueumrqvylwdqcfdx:c47usqda7wif3q4G@aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres"
+        
+# NextJS
+NEXT_PUBLIC_SUPABASE_URL=https://gdauueumrqvylwdqcfdx.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdkYXV1ZXVtcnF2eWx3ZHFjZmR4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzY1NzgwMTUsImV4cCI6MjA1MjE1NDAxNX0.1gmNycem3cAkHeGcb9CKby_7R9QX8zQ6eSL3v_VxPCE

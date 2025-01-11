@@ -1,2 +1,6 @@
 .vercel
 node_modules
+.env
+structure.json
+./data
+back-up-server.json

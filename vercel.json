@@ -1,20 +1,23 @@
 {
-    "version": 2,
-    "name": "text-processing-api",
-    "builds": [
-      {
-        "src": "server.js",
-        "use": "@vercel/node"
-      }
-    ],
-    "routes": [
-      {
-        "src": "/process-text",
-        "dest": "server.js"
-      }
-    ],
-    "env": {
-      "NODE_ENV": "production"
+  "version": 2,
+  "name": "text-processing-api",
+  "builds": [
+    {
+      "src": "server.js",
+      "use": "@vercel/node"
     }
+  ],
+  "routes": [
+    {
+      "src": "/api/text/(.*)",
+      "dest": "/server.js"
+    },
+    {
+      "src": "/api/results/(.*)",
+      "dest": "/server.js"
+    }
+  ],
+  "env": {
+    "NODE_ENV": "production"
   }
-  
+}

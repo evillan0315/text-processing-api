@@ -6,7 +6,14 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
   },
-  "keywords": ["text-processing", "natural-language", "NLP", "themes", "keyword-extraction", "Node.js"],
+  "keywords": [
+    "text-processing",
+    "natural-language",
+    "NLP",
+    "themes",
+    "keyword-extraction",
+    "Node.js"
+  ],
   "author": "Eddie Villanueva",
   "license": "MIT",
   "description": "A text processing API for extracting keywords and identifying themes using natural language processing.",
@@ -21,8 +28,9 @@
   "dependencies": {
     "axios": "^1.7.9",
     "compromise": "^14.14.3",
-    "natural": "^8.0.1",
+    "cors": "^2.8.5",
     "express": "^4.18.2",
-    "cors": "^2.8.5"
+    "mongodb": "^6.12.0",
+    "natural": "^8.0.1"
   }
 }

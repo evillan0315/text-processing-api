@@ -87,6 +87,17 @@ curl -X POST http://localhost:3000/process-text \
 }
 ```
 
+## Database connection
+```javascript
+
+import { createClient } from '@supabase/supabase-js'
+
+const supabaseUrl = process.emv.SUPABASE_URL
+const supabaseKey = process.env.SUPABASE_KEY
+const supabase = createClient(supabaseUrl, supabaseKey)
+
+```
+
 ## Key Libraries Used
 - [express](https://expressjs.com/): Web framework for building the API.
 - [natural](https://github.com/NaturalNode/natural): NLP library for tokenization and similarity measurements.
