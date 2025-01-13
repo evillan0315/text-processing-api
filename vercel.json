@@ -1,6 +1,5 @@
 {
   "version": 2,
-  "name": "text-processing-api",
   "builds": [
     {
       "src": "server.js",

@@ -4,3 +4,4 @@ node_modules
 structure.json
 ./data
 back-up-server.json
+.env.local

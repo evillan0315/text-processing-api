@@ -1,10 +1,10 @@
 {
 	"folders": [
 		{
-			"path": "../my-nextjs-app"
+			"path": "."
 		},
 		{
-			"path": "."
+			"path": "../text-processing-frontend"
 		}
 	],
 	"settings": {}
